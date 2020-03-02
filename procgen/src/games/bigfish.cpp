@@ -78,11 +78,11 @@ class BigFish : public BasicAbstractGame {
     void game_step() override {
         BasicAbstractGame::game_step();
 
-        if (rand_gen.randn(10) == 1) {
-            float ent_r = (FISH_MAX_R - FISH_MIN_R) * pow(rand_gen.rand01(), 1.4) + FISH_MIN_R;
-            float ent_y = rand_gen.rand01() * (main_height - 2 * ent_r);
-            float moves_right = rand_gen.rand01() < .5;
-            float ent_vx = (.15 + rand_gen.rand01() * .25) * (moves_right ? 1 : -1);
+        if (rand_gen_relevant.randn(10) == 1) {
+            float ent_r = (FISH_MAX_R - FISH_MIN_R) * pow(rand_gen_relevant.rand01(), 1.4) + FISH_MIN_R;
+            float ent_y = rand_gen_relevant.rand01() * (main_height - 2 * ent_r);
+            float moves_right = rand_gen_relevant.rand01() < .5;
+            float ent_vx = (.15 + rand_gen_relevant.rand01() * .25) * (moves_right ? 1 : -1);
             float ent_x = moves_right ? -1 * ent_r : main_width + ent_r;
             int type = FISH;
             auto ent = add_entity(ent_x, ent_y, ent_vx, 0, ent_r, type);
