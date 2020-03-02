@@ -54,10 +54,10 @@ class MazeGame : public BasicAbstractGame {
 
         grid_step = true;
 
-        maze_dim = rand_gen.randn((world_dim - 1) / 2) * 2 + 3;
+        maze_dim = rand_gen_relevant.randn((world_dim - 1) / 2) * 2 + 3;
         int margin = (world_dim - maze_dim) / 2;
 
-        std::shared_ptr<MazeGen> _maze_gen(new MazeGen(&rand_gen, maze_dim));
+        std::shared_ptr<MazeGen> _maze_gen(new MazeGen(&rand_gen_relevant, maze_dim));
         maze_gen = _maze_gen;
 
         options.center_agent = options.distribution_mode == MemoryMode;
