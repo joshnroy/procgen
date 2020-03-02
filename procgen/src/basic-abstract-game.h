@@ -8,6 +8,7 @@ Base game class used by all currently existing games
 
 #include <set>
 #include <queue>
+#include <random>
 #include "game.h"
 #include "grid.h"
 #include "cpp-utils.h"
