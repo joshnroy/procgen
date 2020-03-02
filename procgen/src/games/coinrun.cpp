@@ -245,7 +245,7 @@ class CoinRun : public BasicAbstractGame {
     }
 
     void create_enemy(int x, int y) {
-        auto ent = add_entity(x + .5, y + .5, .15 * (rand_gen.randn(2) * 2 - 1), 0, .5, ENEMY);
+        auto ent = add_entity(x + .5, y + .5, .15 * (rand_gen_relevant.randn(2) * 2 - 1), 0, .5, ENEMY);
         ent->smart_step = true;
         ent->image_type = ENEMY1;
         ent->render_z = 1;
@@ -259,14 +259,14 @@ class CoinRun : public BasicAbstractGame {
 
     void generate_coin_to_the_right() {
         int max_difficulty = 3;
-        int dif = rand_gen.randn(max_difficulty) + 1;
+        int dif = rand_gen_relevant.randn(max_difficulty) + 1;
 
-        int num_sections = rand_gen.randn(dif) + dif;
+        int num_sections = rand_gen_relevant.randn(dif) + dif;
         int curr_x = 5;
         int curr_y = 1;
 
         int pit_threshold = dif;
-        int danger_type = rand_gen.randn(3);
+        int danger_type = rand_gen_relevant.randn(3);
 
         bool allow_pit = (options.debug_mode & (1 << 1)) == 0;
         bool allow_crate = (options.debug_mode & (1 << 2)) == 0;
@@ -291,7 +291,7 @@ class CoinRun : public BasicAbstractGame {
                 break;
             }
 
-            int dy = rand_gen.randn(4) + 1 + int(dif / 3);
+            int dy = rand_gen_relevant.randn(4) + 1 + int(dif / 3);
 
             if (!allow_dy) {
                 dy = 0;
@@ -303,11 +303,11 @@ class CoinRun : public BasicAbstractGame {
 
             if (curr_y >= 20) {
                 dy *= -1;
-            } else if (curr_y >= 5 && rand_gen.randn(2) == 1) {
+            } else if (curr_y >= 5 && rand_gen_relevant.randn(2) == 1) {
                 dy *= -1;
             }
 
-            int dx = rand_gen.randn(2 * dif) + 3 + int(dif / 3);
+            int dx = rand_gen_relevant.randn(2 * dif) + 3 + int(dif / 3);
 
             curr_y += dy;
 
@@ -315,11 +315,11 @@ class CoinRun : public BasicAbstractGame {
                 curr_y = 1;
             }
 
-            bool use_pit = allow_pit && (dx > 7) && (curr_y > 3) && (rand_gen.randn(20) >= pit_threshold);
+            bool use_pit = allow_pit && (dx > 7) && (curr_y > 3) && (rand_gen_relevant.randn(20) >= pit_threshold);
 
             if (use_pit) {
-                int x1 = rand_gen.randn(3) + 1;
-                int x2 = rand_gen.randn(3) + 1;
+                int x1 = rand_gen_relevant.randn(3) + 1;
+                int x2 = rand_gen_relevant.randn(3) + 1;
                 int pit_width = dx - x1 - x2;
 
                 if (pit_width > max_dx) {
@@ -330,7 +330,7 @@ class CoinRun : public BasicAbstractGame {
                 fill_ground_block(curr_x, 0, x1, curr_y);
                 fill_ground_block(curr_x + dx - x2, 0, x2, curr_y);
 
-                int lava_height = rand_gen.randn(curr_y - 3) + 1;
+                int lava_height = rand_gen_relevant.randn(curr_y - 3) + 1;
 
                 if (danger_type == 0) {
                     fill_lava_block(curr_x + x1, 1, pit_width, lava_height);
@@ -347,14 +347,14 @@ class CoinRun : public BasicAbstractGame {
                 if (pit_width > 4) {
                     int x3, w1;
                     if (pit_width == 5) {
-                        x3 = 1 + rand_gen.randn(2);
-                        w1 = 1 + rand_gen.randn(2);
+                        x3 = 1 + rand_gen_relevant.randn(2);
+                        w1 = 1 + rand_gen_relevant.randn(2);
                     } else if (pit_width == 6) {
-                        x3 = 2 + rand_gen.randn(2);
-                        w1 = 1 + rand_gen.randn(2);
+                        x3 = 2 + rand_gen_relevant.randn(2);
+                        w1 = 1 + rand_gen_relevant.randn(2);
                     } else {
-                        x3 = 2 + rand_gen.randn(2);
-                        int x4 = 2 + rand_gen.randn(2);
+                        x3 = 2 + rand_gen_relevant.randn(2);
+                        int x4 = 2 + rand_gen_relevant.randn(2);
                         w1 = pit_width - x3 - x4;
                     }
 
@@ -367,23 +367,23 @@ class CoinRun : public BasicAbstractGame {
                 int ob1_x = -1;
                 int ob2_x = -1;
 
-                if (rand_gen.randn(10) < (2 * dif) && dx > 3) {
-                    ob1_x = curr_x + rand_gen.randn(dx - 2) + 1;
+                if (rand_gen_relevant.randn(10) < (2 * dif) && dx > 3) {
+                    ob1_x = curr_x + rand_gen_relevant.randn(dx - 2) + 1;
                     create_saw_enemy(ob1_x, curr_y);
                 }
 
-                if (rand_gen.randn(10) < dif && dx > 3 && (max_dx >= 4) && allow_monsters) {
-                    ob2_x = curr_x + rand_gen.randn(dx - 2) + 1;
+                if (rand_gen_relevant.randn(10) < dif && dx > 3 && (max_dx >= 4) && allow_monsters) {
+                    ob2_x = curr_x + rand_gen_relevant.randn(dx - 2) + 1;
 
                     create_enemy(ob2_x, curr_y);
                 }
 
                 if (allow_crate) {
                     for (int i = 0; i < 2; i++) {
-                        int crate_x = curr_x + rand_gen.randn(dx - 2) + 1;
+                        int crate_x = curr_x + rand_gen_relevant.randn(dx - 2) + 1;
 
-                        if (rand_gen.randn(2) == 1 && ob1_x != crate_x && ob2_x != crate_x) {
-                            int pile_height = rand_gen.randn(3) + 1;
+                        if (rand_gen_relevant.randn(2) == 1 && ob1_x != crate_x && ob2_x != crate_x) {
+                            int pile_height = rand_gen_relevant.randn(3) + 1;
 
                             for (int j = 0; j < pile_height; j++) {
                                 create_crate(crate_x, curr_y + j);

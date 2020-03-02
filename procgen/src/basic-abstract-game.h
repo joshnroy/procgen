@@ -19,6 +19,8 @@ class BasicAbstractGame : public Game {
     BasicAbstractGame();
     ~BasicAbstractGame();
 
+    RandGen rand_gen_relevant;
+
     // Game methods
     void game_step() override;
     void game_reset() override;

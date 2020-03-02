@@ -43,6 +43,7 @@ BasicAbstractGame::BasicAbstractGame()
 
     out_of_bounds_object = INVALID_OBJ;
     has_useful_vel_info = true;
+    rand_gen_relevant.seed(1543);
 }
 
 BasicAbstractGame::~BasicAbstractGame() {
@@ -509,8 +510,8 @@ void BasicAbstractGame::reposition_agent() {
     int count = 0;
 
     do {
-        agent->x = rand_gen.rand01() * (main_width - 2 * agent->rx) + agent->rx;
-        agent->y = rand_gen.rand01() * (main_height - 2 * agent->ry) + agent->ry;
+        agent->x = rand_gen_relevant.rand01() * (main_width - 2 * agent->rx) + agent->rx;
+        agent->y = rand_gen_relevant.rand01() * (main_height - 2 * agent->ry) + agent->ry;
         count++;
     } while (agent_has_collision() && (count < 100));
 }
@@ -661,7 +662,7 @@ void BasicAbstractGame::decay_agent_velocity() {
 }
 
 void BasicAbstractGame::game_step() {
-    step_rand_int = rand_gen.randint(0, 1000000);
+    step_rand_int = rand_gen_relevant.randint(0, 1000000);
     move_action = action % 9;
     special_action = 0;
 
@@ -755,8 +756,8 @@ void BasicAbstractGame::game_reset() {
     float a_r = 0.4f;
 
     if (random_agent_start) {
-        ax = rand_gen.rand01() * (main_width - 2 * a_r) + a_r;
-        ay = rand_gen.rand01() * (main_height - 2 * a_r) + a_r;
+        ax = rand_gen_relevant.rand01() * (main_width - 2 * a_r) + a_r;
+        ay = rand_gen_relevant.rand01() * (main_height - 2 * a_r) + a_r;
     } else {
         ax = a_r;
         ay = a_r;
@@ -1073,7 +1074,7 @@ float BasicAbstractGame::rand_pos(float r, float min, float max) {
         return (max + min) / 2;
     float range = max - min;
     fassert(range >= 2 * r);
-    return (range - 2 * r) * rand_gen.rand01() + r + min;
+    return (range - 2 * r) * rand_gen_relevant.rand01() + r + min;
 }
 
 float BasicAbstractGame::rand_pos(float r, float max) {
