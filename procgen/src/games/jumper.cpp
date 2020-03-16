@@ -239,14 +239,14 @@ class Jumper : public BasicAbstractGame {
 
         int maze_dim = main_width / MAZE_SCALE;
 
-        std::shared_ptr<MazeGen> maze_gen(new MazeGen(&rand_gen, maze_dim));
+        std::shared_ptr<MazeGen> maze_gen(new MazeGen(&rand_gen_relevant, maze_dim));
         maze_gen->generate_maze_no_dead_ends();
 
         for (int i = 0; i < grid_size; i++) {
             int obj = maze_gen->grid.get((i % main_width) / MAZE_SCALE + 1, (i / main_width) / MAZE_SCALE + 1);
 
             float prob = obj == WALL_OBJ ? .8 : .2;
-            if (rand_gen.rand01() < prob) {
+            if (rand_gen_relevant.rand01() < prob) {
                 set_obj(i, WALL_OBJ);
             } else {
                 set_obj(i, SPACE);
@@ -283,7 +283,7 @@ class Jumper : public BasicAbstractGame {
             free_cells.push_back(i);
         }
 
-        int goal_cell = rand_gen.choose_one(free_cells);
+        int goal_cell = rand_gen_relevant.choose_one(free_cells);
 
         std::vector<int> agent_candidates;
 
@@ -296,7 +296,7 @@ class Jumper : public BasicAbstractGame {
             }
         }
 
-        int agent_cell = rand_gen.choose_one(agent_candidates);
+        int agent_cell = rand_gen_relevant.choose_one(agent_candidates);
 
         std::vector<int> goal_path;
         room_manager->find_path(agent_cell, goal_cell, goal_path);
@@ -325,7 +325,7 @@ class Jumper : public BasicAbstractGame {
             int y = i / main_width;
 
             if (is_space_on_ground(x, y) && (is_space_on_ground(x - 1, y) && is_space_on_ground(x + 1, y))) {
-                if (rand_gen.rand01() < spike_prob) {
+                if (rand_gen_relevant.rand01() < spike_prob) {
                     set_obj(x, y, SPIKE);
                 }
             }
@@ -337,11 +337,11 @@ class Jumper : public BasicAbstractGame {
             int y = i / main_width;
 
             if (is_left_wall(x, y) && is_left_wall(x, y + 1) && is_left_wall(x, y + 2)) {
-                set_obj(x, y + rand_gen.randn(3), SPACE);
+                set_obj(x, y + rand_gen_relevant.randn(3), SPACE);
             }
 
             if (is_right_wall(x, y) && is_right_wall(x, y + 1) && is_right_wall(x, y + 2)) {
-                set_obj(x, y + rand_gen.randn(3), SPACE);
+                set_obj(x, y + rand_gen_relevant.randn(3), SPACE);
             }
         }
 
