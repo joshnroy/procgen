@@ -66,6 +66,7 @@ class Game {
 
     RandGen level_seed_rand_gen;
     RandGen rand_gen;
+    RandGen rand_gen_relevant;
 
     StepData step_data;
     int action = 0;

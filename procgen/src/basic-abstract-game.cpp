@@ -43,7 +43,6 @@ BasicAbstractGame::BasicAbstractGame()
 
     out_of_bounds_object = INVALID_OBJ;
     has_useful_vel_info = true;
-    rand_gen_relevant.seed(rand() % 10000);
 }
 
 BasicAbstractGame::~BasicAbstractGame() {
