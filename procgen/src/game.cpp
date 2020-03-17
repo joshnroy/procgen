@@ -103,7 +103,7 @@ void Game::reset() {
         step_data.level_complete = false;
     }
 
-    rand_gen.seed(rand() % 10000);
+    rand_gen.seed(1);
     rand_gen_relevant.seed(current_level_seed);
     game_reset();
 
