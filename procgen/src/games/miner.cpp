@@ -101,8 +101,8 @@ class MinerGame : public BasicAbstractGame {
     }
 
     void choose_new_vel(const std::shared_ptr<Entity> &ent) {
-        int is_horizontal = rand_gen.randbool();
-        int vel = rand_gen.randn(2) * 2 - 1;
+        int is_horizontal = rand_gen_relevant.randbool();
+        int vel = rand_gen_relevant.randn(2) * 2 - 1;
         if (is_horizontal) {
             ent->vx = vel;
             ent->vy = 0;
@@ -144,7 +144,7 @@ class MinerGame : public BasicAbstractGame {
         int num_diamonds = (int)(diamond_pct * grid_size);
         int num_boulders = (int)(boulder_pct * grid_size);
 
-        std::vector<int> obj_idxs = rand_gen.simple_choose(main_area, num_diamonds + num_boulders + 1);
+        std::vector<int> obj_idxs = rand_gen_relevant.simple_choose(main_area, num_diamonds + num_boulders + 1);
 
         int agent_x = obj_idxs[0] % main_width;
         int agent_y = obj_idxs[0] / main_width;
@@ -191,7 +191,7 @@ class MinerGame : public BasicAbstractGame {
 
         fassert(exit_candidates.size() > 0);
 
-        int exit_cell = exit_candidates[rand_gen.randn((int)(exit_candidates.size()))];
+        int exit_cell = exit_candidates[rand_gen_relevant.randn((int)(exit_candidates.size()))];
         set_obj(exit_cell, SPACE);
         auto exit = add_entity((exit_cell % main_width) + .5, (exit_cell / main_width) + .5, 0, 0, .5, EXIT);
         exit->render_z = -1;
@@ -304,7 +304,7 @@ class MinerGame : public BasicAbstractGame {
 
         for (auto ent : entities) {
             if (ent->type == ENEMY) {
-                if (rand_gen.randn(6) == 0) {
+                if (rand_gen_relevant.randn(6) == 0) {
                     choose_new_vel(ent);
                 }
             }

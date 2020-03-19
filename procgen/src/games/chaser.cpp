@@ -150,7 +150,7 @@ class ChaserGame : public BasicAbstractGame {
         }
 
         if (maze_gen == nullptr) {
-            std::shared_ptr<MazeGen> _maze_gen(new MazeGen(&rand_gen, maze_dim));
+            std::shared_ptr<MazeGen> _maze_gen(new MazeGen(&rand_gen_relevant, maze_dim));
             maze_gen = _maze_gen;
         }
 
@@ -172,7 +172,7 @@ class ChaserGame : public BasicAbstractGame {
         std::vector<std::vector<int>> quadrants;
         std::vector<int> orbs_for_quadrant;
         int num_quadrants = 4;
-        int extra_quad = rand_gen.randn(num_quadrants);
+        int extra_quad = rand_gen_relevant.randn(num_quadrants);
 
         for (int i = 0; i < num_quadrants; i++) {
             std::vector<int> quadrant;
@@ -199,7 +199,7 @@ class ChaserGame : public BasicAbstractGame {
         for (int i = 0; i < num_quadrants; i++) {
             int num_orbs = orbs_for_quadrant[i];
             std::vector<int> quadrant = quadrants[i];
-            std::vector<int> selected_idxs = rand_gen.simple_choose((int)(quadrant.size()), num_orbs);
+            std::vector<int> selected_idxs = rand_gen_relevant.simple_choose((int)(quadrant.size()), num_orbs);
 
             for (int j : selected_idxs) {
                 int cell = quadrant[j];
@@ -209,7 +209,7 @@ class ChaserGame : public BasicAbstractGame {
         }
 
         free_cells = get_cells_with_type(SPACE);
-        std::vector<int> selected_idxs = rand_gen.simple_choose((int)(free_cells.size()), 1 + total_enemies);
+        std::vector<int> selected_idxs = rand_gen_relevant.simple_choose((int)(free_cells.size()), 1 + total_enemies);
 
         int start_idx = selected_idxs[0];
         int start = free_cells[start_idx];

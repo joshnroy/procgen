@@ -161,8 +161,8 @@ class DodgeballGame : public BasicAbstractGame {
     }
 
     void split_room(QRectF room, float thickness) {
-        bool will_split_width = rand_gen.rand01() < .5;
-        bool choice2 = rand_gen.rand01() < .5;
+        bool will_split_width = rand_gen_relevant.rand01() < .5;
+        bool choice2 = rand_gen_relevant.rand01() < .5;
 
         if (room.width() < min_dim)
             will_split_width = false;
@@ -174,7 +174,7 @@ class DodgeballGame : public BasicAbstractGame {
         float rw = room.width();
         float rh = room.height();
 
-        float gap = .25 * (rand_gen.randn(3) + 1);
+        float gap = .25 * (rand_gen_relevant.randn(3) + 1);
         float pct = 1 - gap;
 
         if (!will_split_width) {
@@ -221,9 +221,9 @@ class DodgeballGame : public BasicAbstractGame {
     }
 
     void choose_vel(const std::shared_ptr<Entity> &ent) {
-        float vel = ENEMY_VEL * (rand_gen.randn(2) * 2 - 1);
+        float vel = ENEMY_VEL * (rand_gen_relevant.randn(2) * 2 - 1);
 
-        if (rand_gen.randn(2) == 0) {
+        if (rand_gen_relevant.randn(2) == 0) {
             ent->vx = vel;
             ent->vy = 0;
         } else {
@@ -231,7 +231,7 @@ class DodgeballGame : public BasicAbstractGame {
             ent->vx = 0;
         }
 
-        ent->spawn_time = rand_gen.randn(50) + 25;
+        ent->spawn_time = rand_gen_relevant.randn(50) + 25;
     }
 
     float get_tile_aspect_ratio(const std::shared_ptr<Entity> &ent) override {
@@ -316,7 +316,7 @@ class DodgeballGame : public BasicAbstractGame {
             if (rooms.size() == 0)
                 break;
 
-            int idx = rand_gen.randn((int)(rooms.size()));
+            int idx = rand_gen_relevant.randn((int)(rooms.size()));
             QRectF room = rooms[idx];
             rooms.erase(rooms.begin() + idx);
 
@@ -327,7 +327,7 @@ class DodgeballGame : public BasicAbstractGame {
 
         float doorlen = 2 * exit_r;
 
-        int exit_wall_choice = rand_gen.randn(4);
+        int exit_wall_choice = rand_gen_relevant.randn(4);
 
         if (exit_wall_choice == 0) {
             spawn_entity_rxy(doorlen / 2, exit_r, DOOR, 2 * border_r, 2 * border_r, main_width - 4 * border_r, 2 * exit_r);
@@ -341,7 +341,7 @@ class DodgeballGame : public BasicAbstractGame {
 
         reposition_agent();
 
-        num_enemies = rand_gen.randn(max_extra_enemies + 1) + 3;
+        num_enemies = rand_gen_relevant.randn(max_extra_enemies + 1) + 3;
 
         spawn_entities(num_enemies, enemy_r, ENEMY, 0, 0, main_width, main_height);
 
@@ -367,7 +367,7 @@ class DodgeballGame : public BasicAbstractGame {
 
     void fire_ball(const std::shared_ptr<Entity> &ent, float vx, float vy) {
         auto new_ball = add_entity(ent->x, ent->y, vx * ball_vscale, vy * ball_vscale, ball_r, ENEMY_BALL);
-        ent->fire_time = cur_time + rand_gen.randn(4);
+        ent->fire_time = cur_time + rand_gen_relevant.randn(4);
         new_ball->vrot = BALL_V_ROT;
         new_ball->expire_time = 50;
     }

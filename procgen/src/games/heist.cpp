@@ -110,14 +110,14 @@ class HeistGame : public BasicAbstractGame {
 
         int min_maze_dim = 5;
         int max_diff = (world_dim - min_maze_dim) / 2;
-        int difficulty = rand_gen.randn(max_diff + 1);
+        int difficulty = rand_gen_relevant.randn(max_diff + 1);
 
         options.center_agent = options.distribution_mode == MemoryMode;
 
         if (options.distribution_mode == MemoryMode) {
-            num_keys = rand_gen.randn(4);
+            num_keys = rand_gen_relevant.randn(4);
         } else {
-            num_keys = difficulty + rand_gen.randn(2);
+            num_keys = difficulty + rand_gen_relevant.randn(2);
         }
 
         if (num_keys > 3)
@@ -137,15 +137,15 @@ class HeistGame : public BasicAbstractGame {
 
         float r_ent = maze_scale / 2;
 
-        maze_gen = std::make_shared<MazeGen>(&rand_gen, maze_dim);
+        maze_gen = std::make_shared<MazeGen>(&rand_gen_relevant, maze_dim);
         maze_gen->generate_maze_with_doors(num_keys);
 
         // move agent out of the way for maze generation
         agent->x = -1;
         agent->y = -1;
 
-        int off_x = rand_gen.randn(world_dim - maze_dim + 1);
-        int off_y = rand_gen.randn(world_dim - maze_dim + 1);
+        int off_x = rand_gen_relevant.randn(world_dim - maze_dim + 1);
+        int off_y = rand_gen_relevant.randn(world_dim - maze_dim + 1);
 
         for (int i = 0; i < grid_size; i++) {
             set_obj(i, WALL_OBJ);

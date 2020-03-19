@@ -203,7 +203,7 @@ class Ninja : public BasicAbstractGame {
         float bomb_prob = .25 * (difficulty - 1);
         int max_gap_inc = difficulty == 1 ? 1 : 2;
 
-        int num_sections = rand_gen.randn(difficulty) + difficulty;
+        int num_sections = rand_gen_relevant.randn(difficulty) + difficulty;
         int start_x = 5;
         int curr_x = start_x;
         int curr_y = main_height / 2;
@@ -224,7 +224,7 @@ class Ninja : public BasicAbstractGame {
         for (int i = 0; i < num_sections; i++) {
             prev_x = curr_x;
             prev_y = curr_y;
-            int num_edges = rand_gen.randn(2) + 1;
+            int num_edges = rand_gen_relevant.randn(2) + 1;
             int max_y = -1;
             int last_edge_y = -1;
 
@@ -237,7 +237,7 @@ class Ninja : public BasicAbstractGame {
 
                 curr_y = prev_y;
 
-                int dy = rand_gen.randn(inc_dy) + 1 + int(difficulty / 3);
+                int dy = rand_gen_relevant.randn(inc_dy) + 1 + int(difficulty / 3);
 
                 if (dy > max_dy) {
                     dy = max_dy;
@@ -245,7 +245,7 @@ class Ninja : public BasicAbstractGame {
 
                 if (curr_y >= main_height - 15) {
                     dy *= -1;
-                } else if (curr_y >= 5 && rand_gen.rand01() < .4) {
+                } else if (curr_y >= 5 && rand_gen_relevant.rand01() < .4) {
                     dy *= -1;
                 }
 
@@ -259,12 +259,12 @@ class Ninja : public BasicAbstractGame {
                     curr_y = last_edge_y + 2;
                 }
 
-                int dx = min_plat_w + rand_gen.randn(3);
+                int dx = min_plat_w + rand_gen_relevant.randn(3);
 
                 fill_ground_block(curr_x, curr_y - 1, dx, 1);
 
                 curr_x += dx;
-                curr_x += min_gap + rand_gen.randn(max_gap_inc + 1);
+                curr_x += min_gap + rand_gen_relevant.randn(max_gap_inc + 1);
 
                 if (curr_y > max_y)
                     max_y = curr_y;
@@ -274,8 +274,8 @@ class Ninja : public BasicAbstractGame {
                 last_edge_y = curr_y;
             }
 
-            if (rand_gen.rand01() < bomb_prob) {
-                set_obj(rand_gen.randn(curr_x - prev_x + 1) + prev_x, max_y + 2, BOMB);
+            if (rand_gen_relevant.rand01() < bomb_prob) {
+                set_obj(rand_gen_relevant.randn(curr_x - prev_x + 1) + prev_x, max_y + 2, BOMB);
             }
 
             int ceiling_height = 11;
@@ -325,7 +325,7 @@ class Ninja : public BasicAbstractGame {
         }
 
         int max_difficulty = 3;
-        int difficulty = rand_gen.randn(max_difficulty) + 1;
+        int difficulty = rand_gen_relevant.randn(max_difficulty) + 1;
 
         last_fire_time = 0;
 

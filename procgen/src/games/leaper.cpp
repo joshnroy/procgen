@@ -87,7 +87,7 @@ class LeaperGame : public BasicAbstractGame {
     }
 
     float rand_sign() {
-        if (rand_gen.rand01() < 0.5) {
+        if (rand_gen_relevant.rand01() < 0.5) {
             return 1.0;
         } else {
             return -1.0;
@@ -110,7 +110,7 @@ class LeaperGame : public BasicAbstractGame {
     }
 
     int choose_extra_space() {
-        return options.distribution_mode == EasyMode ? 0 : rand_gen.randn(2);
+        return options.distribution_mode == EasyMode ? 0 : rand_gen_relevant.randn(2);
     }
 
     void game_reset() override {
@@ -141,15 +141,15 @@ class LeaperGame : public BasicAbstractGame {
         bottom_road_y = choose_extra_space() + 1;
 
         int max_diff = options.distribution_mode == EasyMode ? 3 : 4;
-        int difficulty = rand_gen.randn(max_diff + 1);
+        int difficulty = rand_gen_relevant.randn(max_diff + 1);
 
         // half the time we add an extra lane to either roads or water
-        int extra_lane_option = options.distribution_mode == EasyMode ? 0 : rand_gen.randn(4);
+        int extra_lane_option = options.distribution_mode == EasyMode ? 0 : rand_gen_relevant.randn(4);
 
         int num_road_lanes = difficulty + (extra_lane_option == 2 ? 1 : 0);
         road_lane_speeds.clear();
         for (int lane = 0; lane < num_road_lanes; lane++) {
-            road_lane_speeds.push_back(rand_sign() * rand_gen.randrange(min_car_speed, max_car_speed));
+            road_lane_speeds.push_back(rand_sign() * rand_gen_relevant.randrange(min_car_speed, max_car_speed));
             fill_elem(0, bottom_road_y + lane, main_width, 1, ROAD);
         }
 
@@ -160,7 +160,7 @@ class LeaperGame : public BasicAbstractGame {
         int num_water_lanes = difficulty + (extra_lane_option == 3 ? 1 : 0);
         int curr_sign = rand_sign();
         for (int lane = 0; lane < num_water_lanes; lane++) {
-            water_lane_speeds.push_back(curr_sign * rand_gen.randrange(min_log_speed, max_log_speed));
+            water_lane_speeds.push_back(curr_sign * rand_gen_relevant.randrange(min_log_speed, max_log_speed));
             curr_sign *= -1;
             fill_elem(0, bottom_water_y + lane, main_width, 1, WATER);
         }
@@ -181,7 +181,7 @@ class LeaperGame : public BasicAbstractGame {
         for (int lane = 0; lane < int(road_lane_speeds.size()); lane++) {
             float speed = road_lane_speeds[lane];
             float spawn_prob = fabs(speed) / 6.0;
-            if (rand_gen.rand01() < spawn_prob) {
+            if (rand_gen_relevant.rand01() < spawn_prob) {
                 float x = speed > 0 ? (-1 * MONSTER_RADIUS) : (main_width + MONSTER_RADIUS);
                 auto m = std::make_shared<Entity>(x, bottom_road_y + lane + 0.5, speed, 0, 2 * MONSTER_RADIUS, MONSTER_RADIUS, CAR);
                 choose_random_theme(m);
@@ -198,7 +198,7 @@ class LeaperGame : public BasicAbstractGame {
         for (int lane = 0; lane < int(water_lane_speeds.size()); lane++) {
             float speed = water_lane_speeds[lane];
             float spawn_prob = fabs(speed) / 2.0;
-            if (rand_gen.rand01() < spawn_prob) {
+            if (rand_gen_relevant.rand01() < spawn_prob) {
                 float x = speed > 0 ? (-1 * LOG_RADIUS) : (main_width + LOG_RADIUS);
                 auto m = std::make_shared<Entity>(x, bottom_water_y + lane + 0.5, speed, 0, LOG_RADIUS, LOG);
                 if (!has_any_collision(m)) {

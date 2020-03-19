@@ -161,19 +161,19 @@ class Climber : public BasicAbstractGame {
         int max_dy = max_jump * max_jump / (2 * gravity);
         int min_dy = 3;
 
-        return rand_gen.randn(max_dy - min_dy + 1) + min_dy;
+        return rand_gen_relevant.randn(max_dy - min_dy + 1) + min_dy;
     }
 
     void generate_platforms() {
-        int difficulty = rand_gen.randn(3);
+        int difficulty = rand_gen_relevant.randn(3);
         int min_platforms = difficulty * difficulty + 1;
         int max_platforms = (difficulty + 1) * (difficulty + 1) + 1;
-        int num_platforms = rand_gen.randn(max_platforms - min_platforms + 1) + min_platforms;
+        int num_platforms = rand_gen_relevant.randn(max_platforms - min_platforms + 1) + min_platforms;
 
         coin_quota = 0;
         coins_collected = 0;
 
-        int curr_x = rand_gen.randn(main_width - 4) + 2;
+        int curr_x = rand_gen_relevant.randn(main_width - 4) + 2;
         int curr_y = 0;
 
         int margin_x = 3;
@@ -185,8 +185,8 @@ class Climber : public BasicAbstractGame {
             // only spawn enemies that won't be trapped in tight spaces
             bool can_spawn_enemy = (curr_x >= margin_x) && (curr_x <= main_width - margin_x);
 
-            if (can_spawn_enemy && (rand_gen.rand01() < enemy_prob)) {
-                auto ent = add_entity(curr_x + .5, curr_y + rand_gen.randn(2) + 2 + .5, .15 * (rand_gen.randn(2) * 2 - 1), 0, .5, ENEMY);
+            if (can_spawn_enemy && (rand_gen_relevant.rand01() < enemy_prob)) {
+                auto ent = add_entity(curr_x + .5, curr_y + rand_gen_relevant.randn(2) + 2 + .5, .15 * (rand_gen_relevant.randn(2) * 2 - 1), 0, .5, ENEMY);
                 ent->image_type = ENEMY1;
                 ent->smart_step = true;
                 ent->climber_spawn_x = curr_x + .5;
@@ -194,9 +194,9 @@ class Climber : public BasicAbstractGame {
             }
 
             curr_y += delta_y;
-            int plat_len = 2 + rand_gen.randn(10);
+            int plat_len = 2 + rand_gen_relevant.randn(10);
 
-            int vx = rand_gen.randn(2) * 2 - 1;
+            int vx = rand_gen_relevant.randn(2) * 2 - 1;
             if (curr_x < margin_x)
                 vx = 1;
             if (curr_x > main_width - margin_x)
@@ -212,13 +212,13 @@ class Climber : public BasicAbstractGame {
                 set_obj(nx, curr_y, WALL_TOP);
             }
 
-            if (rand_gen.rand01() < .5 || i == num_platforms - 1) {
-                int coin_x = rand_gen.choose_one(candidates);
+            if (rand_gen_relevant.rand01() < .5 || i == num_platforms - 1) {
+                int coin_x = rand_gen_relevant.choose_one(candidates);
                 add_entity(coin_x + .5, curr_y + 1.5, 0, 0, 0.3f, COIN);
                 coin_quota += 1;
             }
 
-            int next_x = rand_gen.choose_one(candidates);
+            int next_x = rand_gen_relevant.choose_one(candidates);
             curr_x = next_x;
         }
     }

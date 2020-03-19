@@ -211,33 +211,33 @@ class StarPilotGame : public BasicAbstractGame {
             hp_spawn_right_threshold = 0.9f;
         } else {
             for (size_t i = 0; i < NUM_BASIC_OBJECTS; i++) {
-                hp_vs[i] = rand_gen.rand01() * 1.5 + .35;
-                hp_healths[i] = rand_gen.randint(0, 10) + 1;
-                hp_bullet_r[i] = scale / 5 * (rand_gen.rand01() * .75 + 1) * 1.25;
-                hp_object_r[i] = scale / 2 * (rand_gen.rand01() * .75 + 1);
-                hp_object_prob_weight[i] = rand_gen.rand01();
+                hp_vs[i] = rand_gen_relevant.rand01() * 1.5 + .35;
+                hp_healths[i] = rand_gen_relevant.randint(0, 10) + 1;
+                hp_bullet_r[i] = scale / 5 * (rand_gen_relevant.rand01() * .75 + 1) * 1.25;
+                hp_object_r[i] = scale / 2 * (rand_gen_relevant.rand01() * .75 + 1);
+                hp_object_prob_weight[i] = rand_gen_relevant.rand01();
             }
 
             hp_bullet_r[TURRET] *= 2;
-            hp_vs[BULLET_PLAYER] = 1.5 + rand_gen.rand01();
-            hp_vs[BULLET2] = .5 + rand_gen.rand01() * 2;
-            hp_vs[BULLET3] = .5 + rand_gen.rand01() * 2;
-            hp_object_r[TURRET] *= 2 + rand_gen.rand01() * 2;
-            hp_object_r[METEOR] *= 2 + rand_gen.rand01() * 2;
-            hp_object_r[CLOUD] *= 2 + rand_gen.rand01() * 2;
+            hp_vs[BULLET_PLAYER] = 1.5 + rand_gen_relevant.rand01();
+            hp_vs[BULLET2] = .5 + rand_gen_relevant.rand01() * 2;
+            hp_vs[BULLET3] = .5 + rand_gen_relevant.rand01() * 2;
+            hp_object_r[TURRET] *= 2 + rand_gen_relevant.rand01() * 2;
+            hp_object_r[METEOR] *= 2 + rand_gen_relevant.rand01() * 2;
+            hp_object_r[CLOUD] *= 2 + rand_gen_relevant.rand01() * 2;
 
-            hp_object_prob_weight[FLYER] *= 1 + rand_gen.rand01() * 3;
-            hp_object_prob_weight[TURRET] *= 1 + rand_gen.rand01();
+            hp_object_prob_weight[FLYER] *= 1 + rand_gen_relevant.rand01() * 3;
+            hp_object_prob_weight[TURRET] *= 1 + rand_gen_relevant.rand01();
 
-            hp_slow_v = .25 + rand_gen.rand01() * .5;
-            hp_max_group_size = rand_gen.randint(0, 7) + 1;
+            hp_slow_v = .25 + rand_gen_relevant.rand01() * .5;
+            hp_max_group_size = rand_gen_relevant.randint(0, 7) + 1;
 
-            hp_weapon_bullet_dist = 2 + rand_gen.rand01() * 5;
+            hp_weapon_bullet_dist = 2 + rand_gen_relevant.rand01() * 5;
 
-            hp_min_enemy_delta_t = 5 + rand_gen.randint(0, 15);
-            hp_max_enemy_delta_t = hp_min_enemy_delta_t + 15 + rand_gen.randint(0, 30);
+            hp_min_enemy_delta_t = 5 + rand_gen_relevant.randint(0, 15);
+            hp_max_enemy_delta_t = hp_min_enemy_delta_t + 15 + rand_gen_relevant.randint(0, 30);
 
-            hp_spawn_right_threshold = .75 + .25 * rand_gen.rand01();
+            hp_spawn_right_threshold = .75 + .25 * rand_gen_relevant.rand01();
         }
 
         hp_object_prob_weight[BULLET_PLAYER] = 0;
@@ -252,13 +252,13 @@ class StarPilotGame : public BasicAbstractGame {
     }
 
     void add_spawners() {
-        int t = 1 + rand_gen.randint(hp_min_enemy_delta_t, hp_max_enemy_delta_t);
+        int t = 1 + rand_gen_relevant.randint(hp_min_enemy_delta_t, hp_max_enemy_delta_t);
 
         bool can_spawn_left = options.distribution_mode != EasyMode;
 
         for (int i = 0; t <= SHOOTER_WIN_TIME; i++) {
             int group_size = 1;
-            float start_weight = rand_gen.rand01() * total_prob_weight;
+            float start_weight = rand_gen_relevant.rand01() * total_prob_weight;
             float curr_weight = start_weight;
             int type;
 
@@ -278,7 +278,7 @@ class StarPilotGame : public BasicAbstractGame {
             int flyer_theme = 0;
 
             if (type == FLYER || type == FAST_FLYER) {
-                group_size = rand_gen.randint(0, hp_max_group_size) + 1;
+                group_size = rand_gen_relevant.randint(0, hp_max_group_size) + 1;
                 flyer_theme = rand_gen.randn(NUM_SHIP_THEMES);
             }
 
@@ -286,13 +286,13 @@ class StarPilotGame : public BasicAbstractGame {
 
             for (int j = 0; j < group_size; j++) {
                 int spawn_time = t + j * 5;
-                int fire_time = rand_gen.randint(10, 100);
+                int fire_time = rand_gen_relevant.randint(10, 100);
 
                 float k = 2 * PI / 4;
-                float theta = (rand_gen.rand01() - .5) * k;
+                float theta = (rand_gen_relevant.rand01() - .5) * k;
                 float v_scale = hp_vs[type];
 
-                if (rand_gen.randint(0, 2) == 1) {
+                if (rand_gen_relevant.randint(0, 2) == 1) {
                     theta = 0;
                 }
 
@@ -305,7 +305,7 @@ class StarPilotGame : public BasicAbstractGame {
                 } else if (type == TURRET) {
                     theta = 0;
                     v_scale = hp_slow_v;
-                    fire_time = rand_gen.randint(20, 30);
+                    fire_time = rand_gen_relevant.randint(20, 30);
                 }
 
                 v_scale *= V_SCALE;
@@ -317,7 +317,7 @@ class StarPilotGame : public BasicAbstractGame {
                 float x_pos;
 
                 if (type == FLYER || type == FAST_FLYER) {
-                    if (rand_gen.rand01() > hp_spawn_right_threshold && can_spawn_left) {
+                    if (rand_gen_relevant.rand01() > hp_spawn_right_threshold && can_spawn_left) {
                         spawn_right = false;
                     }
                 }
@@ -350,7 +350,7 @@ class StarPilotGame : public BasicAbstractGame {
                 spawners.push_back(spawner);
             }
 
-            t += rand_gen.randint(hp_min_enemy_delta_t, hp_max_enemy_delta_t);
+            t += rand_gen_relevant.randint(hp_min_enemy_delta_t, hp_max_enemy_delta_t);
         }
     }
 

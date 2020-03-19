@@ -162,7 +162,7 @@ class FruitBotGame : public BasicAbstractGame {
         float lock_rx = .25;
         float lock_ry = 0.45f;
 
-        float pct = min_pct + .2 * rand_gen.rand01();
+        float pct = min_pct + .2 * rand_gen_relevant.rand01();
 
         if (use_door) {
             pct += 0.1f;
@@ -174,14 +174,14 @@ class FruitBotGame : public BasicAbstractGame {
 
         float gapw = pct * rw;
 
-        float w1 = rand_gen.rand01() * (rw - gapw);
+        float w1 = rand_gen_relevant.rand01() * (rw - gapw);
         float w2 = rw - w1 - gapw;
 
         add_entity_rxy(w1 / 2, ry, 0, 0, w1 / 2, wall_ry, BARRIER);
         add_entity_rxy(rw - w2 / 2, ry, 0, 0, w2 / 2, wall_ry, BARRIER);
 
         if (use_door) {
-            int is_on_right = rand_gen.randn(2);
+            int is_on_right = rand_gen_relevant.randn(2);
             float lock_x = w1 + lock_rx + is_on_right * (gapw - 2 * lock_rx);
             float door_x = w1 + gapw / 2 - (is_on_right * 2 - 1) * lock_rx;
 
@@ -211,7 +211,7 @@ class FruitBotGame : public BasicAbstractGame {
             min_pct = .2;
         }
 
-        std::vector<int> partition = rand_gen.partition(main_height - min_sep * num_walls - buf_h, num_walls);
+        std::vector<int> partition = rand_gen_relevant.partition(main_height - min_sep * num_walls - buf_h, num_walls);
 
         int curr_h = 0;
 
@@ -219,15 +219,15 @@ class FruitBotGame : public BasicAbstractGame {
             int dy = min_sep + part;
             curr_h += dy;
 
-            bool use_door = (dy > 5) && rand_gen.rand01() < door_prob;
+            bool use_door = (dy > 5) && rand_gen_relevant.rand01() < door_prob;
 
             add_walls(curr_h, use_door, min_pct);
         }
 
         agent->y = agent->ry;
 
-        int num_good = rand_gen.randn(10) + 10;
-        int num_bad = rand_gen.randn(10) + 10;
+        int num_good = rand_gen_relevant.randn(10) + 10;
+        int num_bad = rand_gen_relevant.randn(10) + 10;
 
         for (int i = 0; i < main_width; i++) {
             auto present = add_entity_rxy(i + .5, main_height - .5, 0, 0, .5, .5, PRESENT);

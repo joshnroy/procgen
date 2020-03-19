@@ -135,11 +135,11 @@ class PlunderGame : public BasicAbstractGame {
         }
 
         for (int i = 0; i < num_lanes; i++) {
-            lane_directions.push_back(rand_gen.rand01() < .5);
-            lane_vels.push_back(.15 + .1 * rand_gen.rand01());
+            lane_directions.push_back(rand_gen_relevant.rand01() < .5);
+            lane_vels.push_back(.15 + .1 * rand_gen_relevant.rand01());
         }
 
-        int num_panels = options.distribution_mode == EasyMode ? 0 : rand_gen.randn(4);
+        int num_panels = options.distribution_mode == EasyMode ? 0 : rand_gen_relevant.randn(4);
         float panel_width = 1.2f;
 
         if (panel_width > 0) {
@@ -181,9 +181,9 @@ class PlunderGame : public BasicAbstractGame {
 
         juice_left -= 0.0015f;
 
-        if (rand_gen.rand01() < spawn_prob) {
+        if (rand_gen_relevant.rand01() < spawn_prob) {
             float ent_r = r_scale;
-            int lane = rand_gen.randn(num_lanes);
+            int lane = rand_gen_relevant.randn(num_lanes);
             float ent_y = (lane * .11 + .4) * (main_height / 2 - ent_r) + main_height / 2;
             float moves_right = lane_directions[lane];
             float ent_vx = lane_vels[lane] * (moves_right ? 1 : -1);
