@@ -147,7 +147,7 @@ class CaveFlyerGame : public BasicAbstractGame {
         out_of_bounds_object = WALL_OBJ;
 
         for (int i = 0; i < grid_size; i++) {
-            if (rand_gen.rand01() < .5) {
+            if (rand_gen_relevant.rand01() < .5) {
                 set_obj(i, WALL_OBJ);
             } else {
                 set_obj(i, SPACE);
@@ -173,7 +173,7 @@ class CaveFlyerGame : public BasicAbstractGame {
             free_cells.push_back(i);
         }
 
-        std::vector<int> selected_idxs = rand_gen.simple_choose((int)(free_cells.size()), 2);
+        std::vector<int> selected_idxs = rand_gen_relevant.simple_choose((int)(free_cells.size()), 2);
         int agent_cell = free_cells[selected_idxs[0]];
         int goal_cell = free_cells[selected_idxs[1]];
 
@@ -227,7 +227,7 @@ class CaveFlyerGame : public BasicAbstractGame {
         int chunk_size = ((int)(free_cells.size()) / 80);
         int num_objs = 3 * chunk_size;
 
-        std::vector<int> obstacle_idxs = rand_gen.simple_choose((int)(free_cells.size()), num_objs);
+        std::vector<int> obstacle_idxs = rand_gen_relevant.simple_choose((int)(free_cells.size()), num_objs);
 
         for (int i = 0; i < num_objs; i++) {
             int val = free_cells[obstacle_idxs[i]];
@@ -241,8 +241,8 @@ class CaveFlyerGame : public BasicAbstractGame {
                 e->collides_with_entities = true;
             } else {
                 auto e = spawn_entity_at_idx(val, .5, ENEMY);
-                float vel = (.1 * rand_gen.rand01() + .1) * (rand_gen.randn(2) * 2 - 1);
-                if (rand_gen.rand01() < .5) {
+                float vel = (.1 * rand_gen_relevant.rand01() + .1) * (rand_gen_relevant.randn(2) * 2 - 1);
+                if (rand_gen_relevant.rand01() < .5) {
                     e->vx = vel;
                 } else {
                     e->vy = vel;

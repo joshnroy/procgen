@@ -196,9 +196,9 @@ class BossfightGame : public BasicAbstractGame {
 
         boss_vel_timeout = BOSS_VEL_TIMEOUT;
         base_fire_prob = 0.1f;
-        round_health = rand_gen.randn(9) + 1;
-        num_rounds = 1 + rand_gen.randn(5);
-        invulnerable_duration = 2 + rand_gen.randn(max_extra_invulnerable + 1);
+        round_health = rand_gen_relevant.randn(9) + 1;
+        num_rounds = 1 + rand_gen_relevant.randn(5);
+        invulnerable_duration = 2 + rand_gen_relevant.randn(max_extra_invulnerable + 1);
         vulnerable_duration = 500; // essentially infinite
 
         boss->health = round_health * num_rounds;
@@ -211,7 +211,7 @@ class BossfightGame : public BasicAbstractGame {
         attack_modes.clear();
 
         for (int i = 0; i < num_rounds; i++) {
-            attack_modes.push_back(rand_gen.randn(NUM_ATTACK_MODES));
+            attack_modes.push_back(rand_gen_relevant.randn(NUM_ATTACK_MODES));
         }
 
         round_num = 0;
@@ -223,7 +223,7 @@ class BossfightGame : public BasicAbstractGame {
         agent->y = agent->ry;
 
         barrier_vel = 0.1f;
-        barriers_moves_right = rand_gen.randbool();
+        barriers_moves_right = rand_gen_relevant.randbool();
         barrier_spawn_prob = 0.025f;
 
         spawn_barriers();
@@ -305,12 +305,12 @@ class BossfightGame : public BasicAbstractGame {
     }
 
     void spawn_barriers() {
-        int num_barriers = rand_gen.randn(3) + 1;
+        int num_barriers = rand_gen_relevant.randn(3) + 1;
         for (int i = 0; i < num_barriers; i++) {
             float barrier_r = 0.6f;
             float min_barrier_y = 2 * agent->ry + barrier_r + .5;
-            float ent_y = rand_gen.rand01() * (BOTTOM_MARGIN - min_barrier_y - barrier_r) + min_barrier_y;
-            float ent_x = rand_gen.rand01() * (main_width - 2 * barrier_r) + barrier_r;
+            float ent_y = rand_gen_relevant.rand01() * (BOTTOM_MARGIN - min_barrier_y - barrier_r) + min_barrier_y;
+            float ent_x = rand_gen_relevant.rand01() * (main_width - 2 * barrier_r) + barrier_r;
 
             auto ent = std::make_shared<Entity>(ent_x, ent_y, 0, 0, barrier_r, BARRIER);
             choose_random_theme(ent);
@@ -332,10 +332,10 @@ class BossfightGame : public BasicAbstractGame {
         shields->x = boss->x;
         shields->y = boss->y;
 
-        rand_pct = rand_gen.rand01();
-        rand_fire_pct = rand_gen.rand01();
-        rand_pct_x = rand_gen.rand01();
-        rand_pct_y = rand_gen.rand01();
+        rand_pct = rand_gen_relevant.rand01();
+        rand_fire_pct = rand_gen_relevant.rand01();
+        rand_pct_x = rand_gen_relevant.rand01();
+        rand_pct_y = rand_gen_relevant.rand01();
 
         if (curr_vel_timeout <= 0) {
             float dest_x = rand_pct_x * (main_width - 2 * BOSS_R) + BOSS_R;
